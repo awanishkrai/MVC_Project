@@ -36,5 +36,7 @@ class DatabaseSeeder extends Seeder
         'role' => 'buyer',
       ]
     );
+
+    $this->call(CategorySeeder::class);
   }
 }

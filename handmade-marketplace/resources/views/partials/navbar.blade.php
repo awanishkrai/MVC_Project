@@ -1,38 +1,37 @@
-<nav class="border-b border-stone-200 bg-white shadow-sm">
-    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
-        <a href="{{ route('home') }}" class="text-xl font-bold text-amber-800">CraftNest</a>
+<nav class="sticky top-0 z-50 border-b border-stone-200/60 bg-white/85 shadow-sm backdrop-blur-xl">
+    <div class="cn-container flex h-16 items-center justify-between gap-4">
+        <a href="{{ route('home') }}" class="group flex items-center gap-2.5">
+            <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-craft-500 to-craft-800 text-sm font-bold text-white shadow-md transition group-hover:scale-105">CN</span>
+            <span class="font-display text-xl font-bold text-stone-900">Craft<span class="text-craft-600">Nest</span></span>
+        </a>
 
-        <div class="flex items-center gap-4 text-sm font-medium">
+        <div class="hidden items-center gap-1 md:flex">
+            <a href="{{ route('products.index') }}" @class(['rounded-xl px-3 py-2 text-sm font-medium transition', 'bg-craft-100 text-craft-800' => request()->routeIs('products.*'), 'text-stone-600 hover:bg-stone-100' => !request()->routeIs('products.*')])>Marketplace</a>
             @auth
-                <span class="hidden text-stone-500 sm:inline">
-                    {{ auth()->user()->name }}
-                    <span class="rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-900">{{ ucfirst(auth()->user()->role) }}</span>
-                </span>
-
                 @if (auth()->user()->isBuyer())
-                    <a href="{{ route('buyer.home') }}" class="text-stone-600 hover:text-amber-800">Home</a>
+                    <a href="{{ route('buyer.home') }}" @class(['rounded-xl px-3 py-2 text-sm font-medium transition', 'bg-craft-100 text-craft-800' => request()->routeIs('buyer.home')])>Home</a>
                 @endif
-
                 @if (auth()->user()->isSeller())
-                    <a href="{{ route('seller.dashboard') }}" class="text-stone-600 hover:text-amber-800">Dashboard</a>
-                    <a href="{{ route('shop.dashboard') }}" class="text-stone-600 hover:text-amber-800">My Shop</a>
+                    <a href="{{ route('seller.dashboard') }}" @class(['rounded-xl px-3 py-2 text-sm font-medium transition', 'bg-craft-100 text-craft-800' => request()->routeIs('seller.dashboard')])>Dashboard</a>
+                    <a href="{{ route('shop.dashboard') }}" @class(['rounded-xl px-3 py-2 text-sm font-medium transition', 'bg-craft-100 text-craft-800' => request()->routeIs('shop.*')])>My Shop</a>
+                    <a href="{{ route('products.manage') }}" @class(['rounded-xl px-3 py-2 text-sm font-medium transition', 'bg-craft-100 text-craft-800' => request()->routeIs('products.manage', 'products.create', 'products.edit')])>Products</a>
                 @endif
-
                 @if (auth()->user()->isAdmin())
-                    <a href="{{ route('admin.dashboard') }}" class="text-stone-600 hover:text-amber-800">Admin</a>
+                    <a href="{{ route('admin.dashboard') }}" @class(['rounded-xl px-3 py-2 text-sm font-medium transition', 'bg-craft-100 text-craft-800' => request()->routeIs('admin.*')])>Admin</a>
                 @endif
+            @endauth
+        </div>
 
-                <a href="{{ route('profile.edit') }}" class="text-stone-600 hover:text-amber-800">Profile</a>
-
-                <form method="POST" action="{{ route('logout') }}" class="inline">
+        <div class="flex items-center gap-2">
+            @auth
+                <a href="{{ route('profile.show') }}" @class(['hidden rounded-xl px-3 py-2 text-sm font-medium sm:inline-flex', 'bg-craft-100 text-craft-800' => request()->routeIs('profile.*'), 'text-stone-600 hover:bg-stone-100' => !request()->routeIs('profile.*')])>Profile</a>
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="rounded-lg bg-stone-800 px-3 py-1.5 text-white hover:bg-stone-700">
-                        Logout
-                    </button>
+                    <button type="submit" class="cn-btn-secondary !rounded-xl !py-2 !px-3 text-xs">Logout</button>
                 </form>
             @else
-                <a href="{{ route('login') }}" class="text-stone-600 hover:text-amber-800">Login</a>
-                <a href="{{ route('register') }}" class="rounded-lg bg-amber-700 px-3 py-1.5 text-white hover:bg-amber-800">Register</a>
+                <a href="{{ route('login') }}" class="cn-btn-ghost !rounded-xl !py-2 text-sm">Login</a>
+                <a href="{{ route('register') }}" class="cn-btn-primary !rounded-xl !py-2 text-sm shadow-craft">Join</a>
             @endauth
         </div>
     </div>

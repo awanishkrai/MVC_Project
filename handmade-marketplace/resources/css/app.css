@@ -1,3 +1,72 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-craft-50 text-stone-800 antialiased;
+    }
+}
+
+@layer components {
+    .cn-container {
+        @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+    }
+
+    .cn-page-header {
+        @apply font-display text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl;
+    }
+
+    .cn-eyebrow {
+        @apply text-xs font-semibold uppercase tracking-[0.2em] text-craft-600;
+    }
+
+    .cn-card {
+        @apply overflow-hidden rounded-3xl border border-stone-200/70 bg-white/90 shadow-craft backdrop-blur-sm;
+    }
+
+    .cn-card-hover {
+        @apply cn-card transition duration-300 hover:-translate-y-1 hover:border-craft-200 hover:shadow-craft-lg;
+    }
+
+    .cn-input {
+        @apply w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-800 shadow-sm transition placeholder:text-stone-400 focus:border-craft-400 focus:outline-none focus:ring-4 focus:ring-craft-100;
+    }
+
+    .cn-label {
+        @apply mb-2 block text-sm font-semibold text-stone-700;
+    }
+
+    .cn-btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-semibold transition focus:outline-none focus:ring-4;
+    }
+
+    .cn-btn-primary {
+        @apply cn-btn bg-gradient-to-r from-craft-600 to-craft-700 text-white shadow-md hover:from-craft-700 hover:to-craft-800 focus:ring-craft-200;
+    }
+
+    .cn-btn-secondary {
+        @apply cn-btn border border-stone-200 bg-white text-stone-700 hover:border-craft-200 hover:bg-craft-50 focus:ring-stone-100;
+    }
+
+    .cn-btn-ghost {
+        @apply cn-btn text-craft-700 hover:bg-craft-50 focus:ring-craft-100;
+    }
+
+    .cn-pattern {
+        background-color: #fdf8f3;
+        background-image: radial-gradient(circle at 1px 1px, rgba(198, 106, 56, 0.07) 1px, transparent 0);
+        background-size: 24px 24px;
+    }
+
+    .cn-hero-gradient {
+        @apply bg-gradient-to-br from-craft-800 via-craft-700 to-amber-900;
+    }
+
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}

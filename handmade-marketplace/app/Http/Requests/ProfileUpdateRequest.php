@@ -28,4 +28,13 @@ class ProfileUpdateRequest extends FormRequest
             ],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Full name is required.',
+            'email.unique' => 'This email is already taken.',
+            'email.email' => 'Please enter a valid email address.',
+        ];
+    }
 }

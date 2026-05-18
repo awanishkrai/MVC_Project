@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Shop extends Model
 {
@@ -26,5 +28,30 @@ class Shop extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    /** shop_name maps to the name column (syllabus-friendly label). */
+    protected function shopName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->attributes['name'] ?? null,
+            set: fn (string $value) => ['name' => $value],
+        );
+    }
+
+    /** Public URL for the shop logo. */
+    public function logoUrl(): ?string
+    {
+        if (! $this->logo_url) {
+            return null;
+        }
+
+        return Storage::disk('public')->url($this->logo_url);
+    }
+
+    /** Route key for public shop page. */
+    public function getRouteKeyName(): string
+    {
+        return 'id';
     }
 }

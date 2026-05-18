@@ -1,21 +1,22 @@
-@if (session('success') || session('error') || session('status'))
-    <div class="mx-auto max-w-5xl px-4 pt-4 sm:px-6">
+@if (session('success') || session('error') || session('status') || $errors->any())
+    <div class="cn-container space-y-2 pt-4">
         @if (session('success'))
-            <div class="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
-                {{ session('success') }}
-            </div>
+            <x-alert type="success" :message="session('success')" />
         @endif
-
         @if (session('error'))
-            <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-                {{ session('error') }}
-            </div>
+            <x-alert type="error" :message="session('error')" />
         @endif
-
         @if (session('status'))
-            <div class="rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-                {{ session('status') }}
-            </div>
+            <x-alert type="info" :message="session('status')" />
+        @endif
+        @if ($errors->any())
+            <x-alert type="error">
+                <ul class="list-inside list-disc space-y-1 text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </x-alert>
         @endif
     </div>
 @endif
