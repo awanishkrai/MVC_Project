@@ -3,23 +3,38 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
+  public function run(): void
+  {
+    User::updateOrCreate(
+      ['email' => 'admin@craftnest.test'],
+      [
+        'name' => 'CraftNest Admin',
+        'password' => Hash::make('password'),
+        'role' => 'admin',
+      ]
+    );
 
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        // User::factory(10)->create();
+    User::updateOrCreate(
+      ['email' => 'seller@craftnest.test'],
+      [
+        'name' => 'Demo Seller',
+        'password' => Hash::make('password'),
+        'role' => 'seller',
+      ]
+    );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-    }
+    User::updateOrCreate(
+      ['email' => 'buyer@craftnest.test'],
+      [
+        'name' => 'Demo Buyer',
+        'password' => Hash::make('password'),
+        'role' => 'buyer',
+      ]
+    );
+  }
 }

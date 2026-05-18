@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shop;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ShopController extends Controller
 {
-    public function create()
+    public function create(): View|RedirectResponse
     {
         if (auth()->user()->shop) {
-            return redirect()->route('seller.dashboard');
+            return redirect()->route('shop.dashboard');
         }
-        return Inertia::render('Shop/Create');
+
+        return view('shop.create');
     }
 
     public function store(Request $request)
@@ -24,23 +25,22 @@ class ShopController extends Controller
             'location' => 'nullable|string',
         ]);
 
-        auth()->user()->shop()->create($request->all());
+        auth()->user()->shop()->create($request->only('name', 'description', 'location'));
 
-        return redirect()->route('seller.dashboard');
+        return redirect()->route('shop.dashboard')
+            ->with('success', 'Your shop has been created!');
     }
 
-    public function dashboard()
+    public function dashboard(): View|RedirectResponse
     {
         $shop = auth()->user()->shop;
+
         if (! $shop) {
             return redirect()->route('shop.create');
         }
-        
+
         $products = $shop->products()->with('images')->latest()->get();
 
-        return Inertia::render('Seller/Dashboard', [
-            'shop' => $shop,
-            'products' => $products,
-        ]);
+        return view('shop.dashboard', compact('shop', 'products'));
     }
 }

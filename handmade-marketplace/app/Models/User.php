@@ -52,4 +52,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(Shop::class);
     }
+
+    public function isBuyer(): bool
+    {
+        return $this->role === 'buyer';
+    }
+
+    public function isSeller(): bool
+    {
+        return $this->role === 'seller';
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
 }

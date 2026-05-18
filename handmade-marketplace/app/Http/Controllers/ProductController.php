@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function create()
+    public function create(): View|RedirectResponse
     {
-        return Inertia::render('Products/Create');
+        if (! auth()->user()->shop) {
+            return redirect()->route('shop.create')
+                ->with('error', 'Create your shop before adding products.');
+        }
+
+        return view('products.create');
     }
 
     public function store(Request $request)
@@ -23,9 +28,9 @@ class ProductController extends Controller
             'category' => 'nullable|string',
         ]);
 
-        $shop = auth()->user()->shop;
-        $shop->products()->create($validated);
+        auth()->user()->shop->products()->create($validated);
 
-        return redirect()->route('seller.dashboard');
+        return redirect()->route('shop.dashboard')
+            ->with('success', 'Product added successfully.');
     }
 }
