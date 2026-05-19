@@ -15,8 +15,13 @@ class ProfileController extends Controller
     public function show(Request $request): View
     {
         $user = $request->user()->load('shop');
+        $view = match (true) {
+            $user->isSeller() && $request->routeIs('seller.settings') => 'seller.settings',
+            $user->isAdmin() && $request->routeIs('admin.settings') => 'admin.settings',
+            default => 'public.profile.show',
+        };
 
-        return view('profile.show', compact('user'));
+        return view($view, compact('user'));
     }
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
@@ -30,8 +35,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return redirect()->route('profile.show')
-            ->with('success', 'Profile updated successfully.');
+        return $this->profileRedirect()->with('success', 'Profile updated successfully.');
     }
 
     public function updatePassword(ProfilePasswordUpdateRequest $request): RedirectResponse
@@ -40,8 +44,7 @@ class ProfileController extends Controller
             'password' => Hash::make($request->validated('password')),
         ]);
 
-        return redirect()->route('profile.show')
-            ->with('success', 'Password changed successfully.');
+        return $this->profileRedirect()->with('success', 'Password changed successfully.');
     }
 
     public function destroy(Request $request): RedirectResponse
@@ -51,14 +54,26 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
-
         Auth::logout();
         $user->delete();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('home')
-            ->with('success', 'Your account has been deleted.');
+        return redirect()->route('home')->with('success', 'Your account has been deleted.');
+    }
+
+    private function profileRedirect(): RedirectResponse
+    {
+        $user = auth()->user();
+
+        if ($user->isSeller()) {
+            return redirect()->route('seller.settings');
+        }
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.settings');
+        }
+
+        return redirect()->route('profile.show');
     }
 }

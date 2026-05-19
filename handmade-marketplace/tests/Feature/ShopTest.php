@@ -14,13 +14,13 @@ class ShopTest extends TestCase
     {
         $seller = User::factory()->create(['role' => 'seller']);
 
-        $response = $this->actingAs($seller)->post(route('shop.store'), [
+        $response = $this->actingAs($seller)->post(route('seller.shop.store'), [
             'shop_name' => 'Artisan Crafts',
             'description' => 'Handmade pottery and decor',
             'location' => 'Kathmandu',
         ]);
 
-        $response->assertRedirect(route('shop.dashboard'));
+        $response->assertRedirect(route('seller.shop.index'));
         $this->assertDatabaseHas('shops', [
             'user_id' => $seller->id,
             'name' => 'Artisan Crafts',
@@ -41,12 +41,12 @@ class ShopTest extends TestCase
         $response->assertSee('Test Shop');
     }
 
-    public function test_buyer_cannot_access_shop_dashboard(): void
+    public function test_buyer_cannot_access_seller_shop_panel(): void
     {
         $buyer = User::factory()->create(['role' => 'buyer']);
 
-        $response = $this->actingAs($buyer)->get(route('shop.dashboard'));
+        $response = $this->actingAs($buyer)->get(route('seller.shop.index'));
 
-        $response->assertRedirect(route('buyer.home'));
+        $response->assertRedirect(route('home'));
     }
 }

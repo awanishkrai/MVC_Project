@@ -19,7 +19,7 @@ class AdminMiddleware
     }
 
     if (! auth()->user()->isAdmin()) {
-      return redirect()->route('buyer.home')
+      return redirect()->route('home')
         ->with('error', 'Access denied. Admin area only.');
     }
 

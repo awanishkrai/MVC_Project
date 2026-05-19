@@ -14,7 +14,6 @@ use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    /** Public marketplace listing */
     public function index(Request $request): View
     {
         $filters = $request->only(['search', 'category', 'stock', 'sort']);
@@ -26,10 +25,9 @@ class ProductController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        return view('products.index', compact('products', 'categories', 'filters'));
+        return view('public.products.index', compact('products', 'categories', 'filters'));
     }
 
-    /** Public product detail */
     public function show(Product $product): View
     {
         abort_unless($product->status === 'published', 404);
@@ -42,28 +40,27 @@ class ProductController extends Controller
             ->take(4)
             ->get();
 
-        return view('products.show', compact('product', 'related'));
+        return view('public.products.show', compact('product', 'related'));
     }
 
-    /** Seller: manage own products */
     public function manage(Request $request): View
     {
         $products = auth()->user()->products()
             ->with('category')
             ->latest()
-            ->paginate(10);
+            ->paginate(12);
 
-        return view('products.manage', compact('products'));
+        return view('seller.products.index', compact('products'));
     }
 
     public function create(): View|RedirectResponse
     {
         if (! auth()->user()->shop) {
-            return redirect()->route('shop.create')
+            return redirect()->route('seller.shop.create')
                 ->with('error', 'Create your shop before adding products.');
         }
 
-        return view('products.create', [
+        return view('seller.products.create', [
             'categories' => Category::orderBy('name')->get(),
         ]);
     }
@@ -80,7 +77,7 @@ class ProductController extends Controller
 
         Product::create($data);
 
-        return redirect()->route('products.manage')
+        return redirect()->route('seller.products.index')
             ->with('success', 'Product published successfully!');
     }
 
@@ -88,7 +85,7 @@ class ProductController extends Controller
     {
         $this->authorizeProduct($product);
 
-        return view('products.edit', [
+        return view('seller.products.edit', [
             'product' => $product,
             'categories' => Category::orderBy('name')->get(),
         ]);
@@ -113,7 +110,7 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return redirect()->route('products.manage')
+        return redirect()->route('seller.products.index')
             ->with('success', 'Product updated successfully.');
     }
 
@@ -127,7 +124,7 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return redirect()->route('products.manage')
+        return redirect()->route('seller.products.index')
             ->with('success', 'Product deleted.');
     }
 

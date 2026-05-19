@@ -19,7 +19,7 @@ class SellerMiddleware
     }
 
     if (! auth()->user()->isSeller()) {
-      return redirect()->route('buyer.home')
+      return redirect()->route('home')
         ->with('error', 'Access denied. Seller area only.');
     }
 

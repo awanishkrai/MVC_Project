@@ -11,6 +11,7 @@ use Illuminate\View\View;
 
 class ShopController extends Controller
 {
+    /** Public storefront */
     public function show(Shop $shop): View
     {
         $shop->load(['user']);
@@ -20,7 +21,7 @@ class ShopController extends Controller
             ->latest()
             ->get();
 
-        return view('shop.show', [
+        return view('public.shop.show', [
             'shop' => $shop,
             'products' => $products,
             'productCount' => $products->count(),
@@ -30,16 +31,16 @@ class ShopController extends Controller
     public function create(): View|RedirectResponse
     {
         if (auth()->user()->shop) {
-            return redirect()->route('shop.dashboard');
+            return redirect()->route('seller.shop.index');
         }
 
-        return view('shop.create');
+        return view('seller.shop.create');
     }
 
     public function store(ShopStoreRequest $request): RedirectResponse
     {
         if (auth()->user()->shop) {
-            return redirect()->route('shop.dashboard')
+            return redirect()->route('seller.shop.index')
                 ->with('error', 'You already have a shop.');
         }
 
@@ -55,7 +56,7 @@ class ShopController extends Controller
 
         auth()->user()->shop()->create($data);
 
-        return redirect()->route('shop.dashboard')
+        return redirect()->route('seller.shop.index')
             ->with('success', 'Your shop has been created successfully!');
     }
 
@@ -64,11 +65,11 @@ class ShopController extends Controller
         $shop = auth()->user()->shop;
 
         if (! $shop) {
-            return redirect()->route('shop.create')
+            return redirect()->route('seller.shop.create')
                 ->with('error', 'Create your shop first.');
         }
 
-        return view('shop.edit', compact('shop'));
+        return view('seller.shop.edit', compact('shop'));
     }
 
     public function update(ShopUpdateRequest $request): RedirectResponse
@@ -76,7 +77,7 @@ class ShopController extends Controller
         $shop = auth()->user()->shop;
 
         if (! $shop) {
-            return redirect()->route('shop.create');
+            return redirect()->route('seller.shop.create');
         }
 
         $data = [
@@ -94,7 +95,7 @@ class ShopController extends Controller
 
         $shop->update($data);
 
-        return redirect()->route('shop.dashboard')
+        return redirect()->route('seller.shop.index')
             ->with('success', 'Shop updated successfully.');
     }
 
@@ -103,12 +104,15 @@ class ShopController extends Controller
         $shop = auth()->user()->shop;
 
         if (! $shop) {
-            return redirect()->route('shop.create');
+            return redirect()->route('seller.shop.create');
         }
 
-        $products = $shop->products()->latest()->get();
-        $productCount = $products->count();
+        $products = $shop->products()->with('category')->latest()->get();
 
-        return view('shop.dashboard', compact('shop', 'products', 'productCount'));
+        return view('seller.shop.index', [
+            'shop' => $shop,
+            'products' => $products,
+            'productCount' => $products->count(),
+        ]);
     }
 }

@@ -1,4 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+@section('page-title', 'Categories')
+@section('page-subtitle', 'Organize marketplace products')
 @section('title', 'Categories — Admin')
 
 @section('content')

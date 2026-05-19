@@ -9,10 +9,10 @@ use App\Models\User;
 
 class DashboardController extends Controller
 {
-    public function buyer()
+    /** Public homepage — marketplace entry */
+    public function home()
     {
-        return view('dashboards.buyer', [
-            'user' => auth()->user(),
+        return view('public.home', [
             'categories' => Category::withCount(['products' => fn ($q) => $q->published()])->orderBy('name')->get(),
             'featuredProducts' => Product::published()->with(['shop', 'category'])->latest()->take(8)->get(),
             'shops' => Shop::with('user')->latest()->take(6)->get(),
@@ -24,17 +24,21 @@ class DashboardController extends Controller
         $user = auth()->user()->load('shop');
         $shop = $user->shop;
 
-        return view('dashboards.seller', [
+        return view('seller.dashboard', [
             'user' => $user,
+            'shop' => $shop,
             'productCount' => $shop ? $shop->products()->count() : 0,
             'publishedCount' => $shop ? $shop->products()->where('status', 'published')->count() : 0,
-            'categories' => Category::orderBy('name')->get(),
+            'lowStockCount' => $shop ? $shop->products()->where('stock_status', 'low_stock')->count() : 0,
+            'recentProducts' => $shop
+                ? $shop->products()->with('category')->latest()->take(5)->get()
+                : collect(),
         ]);
     }
 
     public function admin()
     {
-        return view('dashboards.admin', [
+        return view('admin.dashboard', [
             'user' => auth()->user(),
             'stats' => [
                 'users' => User::count(),
@@ -44,6 +48,8 @@ class DashboardController extends Controller
                 'products' => Product::count(),
                 'categories' => Category::count(),
             ],
+            'recentUsers' => User::latest()->take(5)->get(),
+            'recentProducts' => Product::with(['shop', 'category'])->latest()->take(5)->get(),
         ]);
     }
 }
