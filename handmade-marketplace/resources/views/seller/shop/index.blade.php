@@ -6,11 +6,7 @@
 @section('content')
 <div class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
     <div class="flex items-center gap-4">
-        @if ($shop->logo_url)
-            <img src="{{ $shop->logoUrl() }}" class="h-16 w-16 rounded-2xl object-cover shadow-craft ring-2 ring-white">
-        @else
-            <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-craft-500 to-craft-700 text-2xl font-bold text-white">{{ strtoupper(substr($shop->shop_name, 0, 1)) }}</div>
-        @endif
+        <x-shop-logo :shop="$shop" size="md" class="shadow-craft ring-2 ring-white" />
         <div>
             <p class="cn-eyebrow">Seller panel</p>
             <h1 class="cn-page-header !text-2xl sm:!text-3xl">{{ $shop->shop_name }}</h1>

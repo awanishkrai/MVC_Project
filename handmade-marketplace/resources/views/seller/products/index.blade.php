@@ -28,11 +28,9 @@
                         <tr class="hover:bg-craft-50/40">
                             <td class="px-5 py-4">
                                 <div class="flex items-center gap-3">
-                                    @if ($product->imageUrl())
-                                        <img src="{{ $product->imageUrl() }}" class="h-11 w-11 rounded-lg object-cover" alt="">
-                                    @else
-                                        <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-craft-100 text-lg">🧵</div>
-                                    @endif
+                                    <div class="h-11 w-11 overflow-hidden rounded-lg">
+                                        <x-product-image :product="$product" img-class="h-11 w-11 rounded-lg object-cover" fallback-class="flex h-11 w-11 items-center justify-center rounded-lg bg-craft-100" placeholder="🧵" />
+                                    </div>
                                     <div>
                                         <p class="font-medium text-stone-900">{{ $product->title }}</p>
                                         <p class="text-xs text-stone-400">Qty: {{ $product->quantity }}</p>

@@ -12,11 +12,19 @@
         <x-panel-nav-item href="{{ route('admin.categories.index') }}" :active="request()->routeIs('admin.categories.*')" icon="🏷️" theme="dark">Categories</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('admin.products.index') }}" :active="request()->routeIs('admin.products.*')" icon="📦" theme="dark" badge="Soon">Products</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')" icon="👥" theme="dark" badge="Soon">Users</x-panel-nav-item>
-        <x-panel-nav-item href="{{ route('admin.orders.index') }}" :active="request()->routeIs('admin.orders.*')" icon="🛒" theme="dark" badge="Soon">Orders</x-panel-nav-item>
+        <x-panel-nav-item href="{{ route('admin.orders.index') }}" :active="request()->routeIs('admin.orders.*')" icon="🛒" theme="dark">Orders</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('admin.reports.index') }}" :active="request()->routeIs('admin.reports.*')" icon="📈" theme="dark" badge="Soon">Reports</x-panel-nav-item>
     </nav>
 
-    <div class="border-t border-slate-800 p-4">
-        <a href="{{ route('home') }}" class="text-xs text-slate-400 hover:text-white">← Back to marketplace</a>
+    <div class="space-y-3 border-t border-slate-800 p-4">
+        <a href="{{ route('home') }}" class="block text-xs text-slate-400 transition hover:text-white">← Back to marketplace</a>
+        <a href="{{ route('admin.settings') }}" class="flex items-center gap-2 text-sm text-slate-300 transition hover:text-white">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-700 text-xs font-bold">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+            <span class="truncate">{{ auth()->user()->name }}</span>
+        </a>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="text-xs font-medium text-slate-400 transition hover:text-red-400">Log out</button>
+        </form>
     </div>
 </aside>

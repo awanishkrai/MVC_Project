@@ -58,6 +58,11 @@ class User extends Authenticatable
         return $this->hasMany(Product::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     public function isBuyer(): bool
     {
         return $this->role === 'buyer';

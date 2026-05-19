@@ -18,7 +18,15 @@
             <nav class="flex items-center gap-1 sm:gap-2">
                 <a href="{{ route('products.index') }}" @class(['hidden rounded-full px-3 py-2 text-sm font-medium sm:inline-flex', 'bg-craft-100 text-craft-800' => request()->routeIs('products.*'), 'text-stone-600 hover:bg-stone-100' => !request()->routeIs('products.*')])>Shop</a>
 
+                <a href="{{ route('cart.index') }}" @class(['relative rounded-full px-3 py-2 text-sm font-medium', 'bg-craft-100 text-craft-800' => request()->routeIs('cart.*'), 'text-stone-600 hover:bg-stone-100' => !request()->routeIs('cart.*')])>
+                    Cart
+                    @if (($cartCount ?? 0) > 0)
+                        <span class="absolute -right-0.5 -top-0.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-craft-600 px-1 text-[10px] font-bold text-white">{{ $cartCount }}</span>
+                    @endif
+                </a>
+
                 @auth
+                    <a href="{{ route('orders.index') }}" @class(['hidden rounded-full px-3 py-2 text-sm font-medium sm:inline-flex', 'bg-craft-100 text-craft-800' => request()->routeIs('orders.*'), 'text-stone-600 hover:bg-stone-100' => !request()->routeIs('orders.*')])>Orders</a>
                     @if (auth()->user()->isSeller())
                         <a href="{{ route('seller.dashboard') }}" class="hidden rounded-full bg-stone-900 px-3 py-2 text-xs font-semibold text-white hover:bg-stone-800 sm:inline-flex">Seller panel</a>
                     @endif

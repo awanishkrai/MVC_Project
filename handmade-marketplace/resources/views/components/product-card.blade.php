@@ -2,12 +2,7 @@
 
 <a href="{{ route('products.show', $product) }}" class="cn-card-hover group block overflow-hidden">
     <div class="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-craft-100 to-stone-100">
-        @if ($product->imageUrl())
-            <img src="{{ $product->imageUrl() }}" alt="{{ $product->title }}"
-                class="h-full w-full object-cover transition duration-500 group-hover:scale-110">
-        @else
-            <div class="flex h-full items-center justify-center text-5xl opacity-40">🧵</div>
-        @endif
+        <x-product-image :product="$product" img-class="h-full w-full object-cover transition duration-500 group-hover:scale-110" fallback-class="flex h-full w-full items-center justify-center bg-gradient-to-br from-craft-100 to-stone-100" />
         @if ($product->category)
             <span class="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-craft-800 shadow-sm backdrop-blur">
                 {{ $product->category->icon }} {{ $product->category->name }}

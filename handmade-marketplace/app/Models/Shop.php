@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\PublicStorage;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -42,11 +43,7 @@ class Shop extends Model
     /** Public URL for the shop logo. */
     public function logoUrl(): ?string
     {
-        if (! $this->logo_url) {
-            return null;
-        }
-
-        return Storage::disk('public')->url($this->logo_url);
+        return PublicStorage::url($this->logo_url);
     }
 
     /** Route key for public shop page. */

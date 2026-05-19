@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\PublicStorage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -69,11 +70,14 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function imageUrl(): ?string
     {
-        return $this->image
-            ? Storage::disk('public')->url($this->image)
-            : null;
+        return PublicStorage::url($this->image);
     }
 
     public function isInStock(): bool

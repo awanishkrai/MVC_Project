@@ -14,7 +14,7 @@
     @include('partials.public.category-strip')
     @include('partials.flash')
 
-    <main class="flex-1">
+    <main class="flex-1 @yield('main-class')">
         @yield('content')
     </main>
 
