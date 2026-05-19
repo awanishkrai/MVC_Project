@@ -26,6 +26,12 @@
                 </a>
 
                 @auth
+                    <a href="{{ route('wishlist.index') }}" @class(['relative hidden rounded-full px-3 py-2 text-sm font-medium sm:inline-flex', 'bg-craft-100 text-craft-800' => request()->routeIs('wishlist.*'), 'text-stone-600 hover:bg-stone-100' => !request()->routeIs('wishlist.*')])>
+                        Wishlist
+                        @if (($wishlistCount ?? 0) > 0)
+                            <span class="absolute -right-0.5 -top-0.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">{{ $wishlistCount }}</span>
+                        @endif
+                    </a>
                     <a href="{{ route('orders.index') }}" @class(['hidden rounded-full px-3 py-2 text-sm font-medium sm:inline-flex', 'bg-craft-100 text-craft-800' => request()->routeIs('orders.*'), 'text-stone-600 hover:bg-stone-100' => !request()->routeIs('orders.*')])>Orders</a>
                     @if (auth()->user()->isSeller())
                         <a href="{{ route('seller.dashboard') }}" class="hidden rounded-full bg-stone-900 px-3 py-2 text-xs font-semibold text-white hover:bg-stone-800 sm:inline-flex">Seller panel</a>

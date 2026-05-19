@@ -2,14 +2,18 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Seller\OrderController as SellerOrderController;
+use App\Http\Controllers\Seller\ReviewController as SellerReviewController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +59,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/{product}', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlist/{product}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+    Route::post('/wishlist/{product}/move-to-cart', [WishlistController::class, 'moveToCart'])->name('wishlist.move-to-cart');
+
+    Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::put('/products/{product}/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/products/{product}/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
 /*
@@ -84,6 +97,7 @@ Route::middleware(['auth', 'seller'])
         // Placeholders — future modules
         Route::get('/orders', [SellerOrderController::class, 'index'])->name('orders.index');
         Route::patch('/orders/{order}/status', [SellerOrderController::class, 'updateStatus'])->name('orders.update-status');
+        Route::get('/reviews', [SellerReviewController::class, 'index'])->name('reviews.index');
         Route::view('/messages', 'seller.placeholders.coming-soon', ['title' => 'Messages', 'module' => 'Messaging'])->name('messages.index');
         Route::view('/analytics', 'seller.placeholders.coming-soon', ['title' => 'Analytics', 'module' => 'Analytics'])->name('analytics.index');
         Route::get('/settings', [ProfileController::class, 'show'])->name('settings');
@@ -113,6 +127,8 @@ Route::middleware(['auth', 'admin'])
         Route::view('/users', 'admin.placeholders.coming-soon', ['title' => 'Users', 'module' => 'User management'])->name('users.index');
         Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
         Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
+        Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
+        Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
         Route::view('/reports', 'admin.placeholders.coming-soon', ['title' => 'Reports', 'module' => 'Reports'])->name('reports.index');
         Route::get('/settings', [ProfileController::class, 'show'])->name('settings');
     });

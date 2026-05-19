@@ -13,6 +13,7 @@
         <x-panel-nav-item href="{{ route('admin.products.index') }}" :active="request()->routeIs('admin.products.*')" icon="📦" theme="dark" badge="Soon">Products</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')" icon="👥" theme="dark" badge="Soon">Users</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('admin.orders.index') }}" :active="request()->routeIs('admin.orders.*')" icon="🛒" theme="dark">Orders</x-panel-nav-item>
+        <x-panel-nav-item href="{{ route('admin.reviews.index') }}" :active="request()->routeIs('admin.reviews.*')" icon="⭐" theme="dark">Reviews</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('admin.reports.index') }}" :active="request()->routeIs('admin.reports.*')" icon="📈" theme="dark" badge="Soon">Reports</x-panel-nav-item>
     </nav>
 

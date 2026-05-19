@@ -6,6 +6,7 @@ use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Review;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +29,7 @@ class ProductController extends Controller
         return view('public.products.index', compact('products', 'categories', 'filters'));
     }
 
-    public function show(Product $product): View
+    public function show(Request $request, Product $product): View
     {
         abort_unless($product->status === 'published', 404);
 
@@ -40,7 +41,35 @@ class ProductController extends Controller
             ->take(4)
             ->get();
 
-        return view('public.products.show', compact('product', 'related'));
+        $reviewSort = $request->query('review_sort', 'newest');
+        $reviews = $product->reviews()
+            ->with('user')
+            ->sorted($reviewSort)
+            ->paginate(8)
+            ->withQueryString();
+
+        $ratingDistribution = $product->ratingDistribution();
+
+        $userReview = auth()->check()
+            ? $product->reviews()->where('user_id', auth()->id())->first()
+            : null;
+
+        $canReview = auth()->check()
+            && ! $userReview
+            && $request->user()->can('create', [Review::class, $product]);
+
+        $isWishlisted = auth()->check() && auth()->user()->hasWishlisted($product->id);
+
+        return view('public.products.show', compact(
+            'product',
+            'related',
+            'reviews',
+            'reviewSort',
+            'ratingDistribution',
+            'userReview',
+            'canReview',
+            'isWishlisted'
+        ));
     }
 
     public function manage(Request $request): View

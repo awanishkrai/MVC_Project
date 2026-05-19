@@ -37,6 +37,12 @@
                 <div class="mt-4 flex flex-wrap items-center gap-3">
                     <p class="text-3xl font-bold text-craft-700">${{ number_format($product->price, 2) }}</p>
                     <x-stock-badge :status="$product->stock_status" />
+                    @if ($product->hasReviews())
+                        <div class="flex items-center gap-1.5 text-sm text-stone-600">
+                            <x-rating-stars :rating="$product->average_rating" size="sm" />
+                            <span>({{ $product->reviews_count }})</span>
+                        </div>
+                    @endif
                 </div>
 
                 <p class="mt-6 leading-relaxed text-stone-600">{{ $product->description }}</p>
@@ -64,7 +70,26 @@
                     @else
                         <button type="button" class="cn-btn-primary w-full cursor-not-allowed opacity-60" disabled>Out of stock</button>
                     @endif
-                    <a href="{{ route('shops.show', $product->shop) }}" class="cn-btn-secondary mt-3 w-full text-center">Visit {{ $product->shop->shop_name }}</a>
+                    <div class="mt-3 flex flex-col gap-2 sm:flex-row">
+                        @auth
+                            @if (auth()->id() !== $product->user_id)
+                                @if ($isWishlisted)
+                                    <form action="{{ route('wishlist.destroy', $product) }}" method="POST" class="flex-1">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="cn-btn-secondary w-full">♥ Saved to wishlist</button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('wishlist.store', $product) }}" method="POST" class="flex-1">
+                                        @csrf
+                                        <button type="submit" class="cn-btn-secondary w-full">♡ Save to wishlist</button>
+                                    </form>
+                                @endif
+                            @endif
+                        @else
+                            <a href="{{ route('login') }}" class="cn-btn-secondary flex-1 text-center">♡ Save to wishlist</a>
+                        @endauth
+                        <a href="{{ route('shops.show', $product->shop) }}" class="cn-btn-secondary flex-1 text-center">Visit shop</a>
+                    </div>
                 </div>
 
                 <div class="cn-card mt-6 flex items-center gap-4 p-5">
@@ -78,6 +103,59 @@
             </div>
         </div>
     </div>
+
+    {{-- Reviews --}}
+    <section id="reviews" class="mt-16 border-t border-stone-200/80 pt-12">
+        <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <div>
+                <p class="cn-eyebrow">Customer feedback</p>
+                <h2 class="font-display text-2xl font-bold text-stone-900">Reviews</h2>
+            </div>
+            @if ($product->hasReviews())
+                <form method="GET" class="flex items-center gap-2">
+                    <label for="review_sort" class="sr-only">Sort reviews</label>
+                    <select id="review_sort" name="review_sort" onchange="this.form.submit()" class="cn-input !w-auto !py-2 !text-sm">
+                        <option value="newest" @selected($reviewSort === 'newest')>Newest</option>
+                        <option value="highest" @selected($reviewSort === 'highest')>Highest rated</option>
+                        <option value="lowest" @selected($reviewSort === 'lowest')>Lowest rated</option>
+                    </select>
+                </form>
+            @endif
+        </div>
+
+        @if ($product->hasReviews())
+            <x-review-summary :product="$product" :distribution="$ratingDistribution" class="mb-8" />
+        @endif
+
+        @auth
+            @if ($userReview)
+                <x-review-card :review="$userReview" :editable="true" class="mb-6" />
+                <x-review-form :product="$product" :review="$userReview" form-id="edit-review-form" class="mb-8 hidden" />
+            @elseif ($canReview)
+                <x-review-form :product="$product" class="mb-8" />
+            @elseif(auth()->id() === $product->user_id)
+                <p class="cn-card mb-8 p-5 text-sm text-stone-500">You cannot review your own product.</p>
+            @elseif(! \App\Models\Review::userHasPurchased(auth()->user(), $product))
+                <p class="cn-card mb-8 p-5 text-sm text-stone-500">Purchase this product to leave a verified review.</p>
+            @endif
+        @else
+            <p class="cn-card mb-8 p-5 text-sm text-stone-500">
+                <a href="{{ route('login') }}" class="font-medium text-craft-700 hover:underline">Sign in</a> to write a review after purchase.
+            </p>
+        @endauth
+
+        @if ($reviews->isEmpty())
+            <x-empty-state title="No reviews yet" description="Be the first to share your experience with this handmade piece." icon="⭐" />
+        @else
+            <div class="space-y-4">
+                @foreach ($reviews as $review)
+                    @continue(auth()->check() && $userReview && $review->id === $userReview->id)
+                    <x-review-card :review="$review" />
+                @endforeach
+            </div>
+            <div class="mt-8">{{ $reviews->links() }}</div>
+        @endif
+    </section>
 
     @if ($related->isNotEmpty())
     <section class="mt-16 border-t border-stone-200/80 pt-12">

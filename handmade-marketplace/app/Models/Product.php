@@ -75,6 +75,51 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function refreshReviewStats(): void
+    {
+        $aggregate = $this->reviews()
+            ->selectRaw('COALESCE(AVG(rating), 0) as avg_rating, COUNT(*) as total')
+            ->first();
+
+        $count = (int) ($aggregate->total ?? 0);
+
+        $this->forceFill([
+            'average_rating' => $count > 0 ? round((float) $aggregate->avg_rating, 2) : null,
+            'reviews_count' => $count,
+        ])->saveQuietly();
+    }
+
+    /** @return array<int, int> stars 1–5 => count */
+    public function ratingDistribution(): array
+    {
+        $counts = $this->reviews()
+            ->selectRaw('rating, COUNT(*) as aggregate')
+            ->groupBy('rating')
+            ->pluck('aggregate', 'rating');
+
+        $distribution = [];
+        for ($star = 5; $star >= 1; $star--) {
+            $distribution[$star] = (int) ($counts[$star] ?? 0);
+        }
+
+        return $distribution;
+    }
+
+    public function hasReviews(): bool
+    {
+        return $this->reviews_count > 0;
+    }
+
     public function imageUrl(): ?string
     {
         return PublicStorage::url($this->image);
