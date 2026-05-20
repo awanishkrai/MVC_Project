@@ -1,59 +1,212 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CraftNest
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**CraftNest** is a production-style multi-vendor handmade marketplace inspired by Etsy. Buyers discover artisan goods, sellers run shops, and admins moderate the platform — all built with **Laravel 12**, **Blade**, **Tailwind CSS**, and **MySQL**.
 
-## About Laravel
+![CraftNest](https://img.shields.io/badge/Laravel-12-red?style=flat-square&logo=laravel)
+![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php)
+![Tests](https://img.shields.io/badge/tests-56%20passing-success?style=flat-square)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Public / Buyer
+- Marketplace browsing with search, categories, and filters
+- Product detail pages with reviews and ratings
+- Session cart, checkout (COD + simulated card), order tracking
+- Wishlist with heart favorites and move-to-cart
+- In-app notification center + transactional emails
+- Buyer profile and account management
+- Dark mode with persisted theme preference
+- Floating help chatbot (orders, shipping, payments, seller FAQ)
 
-## Learning Laravel
+### Seller Panel
+- Shop creation and storefront preview
+- Product CRUD with image uploads
+- Order management and status updates
+- Review analytics dashboard
+- Revenue/order charts (Chart.js)
+- CSV export reports
+- Low-stock and wishlist milestone alerts
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Admin Panel
+- Platform dashboard and analytics
+- Category CRUD
+- Order oversight across vendors
+- Review moderation
+- Platform-wide reports and CSV exports
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Tech Stack
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+| Layer | Technology |
+|-------|------------|
+| Backend | Laravel 12 (MVC) |
+| Frontend | Blade + Tailwind CSS + Vite |
+| Database | MySQL (SQLite supported for tests) |
+| Auth | Laravel Breeze-style session auth with roles |
+| Notifications | Laravel database notifications |
+| Email | Laravel Mailables (Mailtrap-compatible SMTP) |
+| Charts | Chart.js |
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Screenshots
 
-## Contributing
+> Add screenshots to `/docs/screenshots/` and reference them here for your portfolio README.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Home | Marketplace | Seller Dashboard |
+|------|-------------|------------------|
+| _screenshot-home.png_ | _screenshot-marketplace.png_ | _screenshot-seller.png_ |
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Installation
 
-## Security Vulnerabilities
+### Prerequisites
+- PHP 8.2+
+- Composer
+- Node.js 18+
+- MySQL 8+ (or MariaDB)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Setup
+
+```bash
+# 1. Clone and enter project
+cd handmade-marketplace
+
+# 2. Install dependencies
+composer install
+npm install
+
+# 3. Environment
+copy .env.example .env   # Windows
+# cp .env.example .env   # macOS/Linux
+
+php artisan key:generate
+
+# 4. Configure database in .env
+# DB_DATABASE=craftnest
+# DB_USERNAME=root
+# DB_PASSWORD=your_password
+
+# 5. Migrate and seed demo data
+php artisan migrate --seed
+
+# 6. Storage link (required for product/shop images)
+php artisan storage:link
+
+# 7. Build assets
+npm run build
+# or for development: npm run dev
+
+# 8. Start server
+php artisan serve
+```
+
+Visit **http://127.0.0.1:8000**
+
+> **Note:** Do not run `php artisan migrate:fresh` unless you intend to wipe all data.
+
+---
+
+## Demo Accounts
+
+Password for all accounts: **`password`**
+
+| Role | Email |
+|------|-------|
+| Buyer | buyer@craftnest.test |
+| Seller | seller@craftnest.test |
+| Admin | admin@craftnest.test |
+
+---
+
+## Mail Setup (Optional)
+
+Transactional emails are sent for order and review events when SMTP is configured.
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your_mailtrap_user
+MAIL_PASSWORD=your_mailtrap_pass
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="noreply@craftnest.com"
+MAIL_FROM_NAME="CraftNest"
+CRAFTNEST_MAIL_NOTIFICATIONS=true
+```
+
+**Emails sent:**
+- **Buyers:** order placed, shipped, delivered
+- **Sellers:** new order, new review
+
+Disable emails without affecting in-app notifications:
+
+```env
+CRAFTNEST_MAIL_NOTIFICATIONS=false
+```
+
+---
+
+## Testing
+
+```bash
+php artisan test
+```
+
+All feature tests run against an in-memory SQLite database. Mail uses the `array` driver in tests.
+
+---
+
+## Architecture
+
+```
+app/
+├── Http/Controllers/     # MVC controllers (Public, Seller, Admin, Auth)
+├── Http/Middleware/      # Role-based access (buyer, seller, admin)
+├── Models/               # Eloquent models
+├── Services/             # Cart, notifications, analytics, email
+├── Mail/                 # Transactional mailables
+└── Notifications/        # Database notifications
+
+resources/views/
+├── layouts/              # public, seller, admin, guest (auth)
+├── public/               # Buyer-facing pages
+├── seller/               # Seller panel
+├── admin/                # Admin panel
+├── auth/                 # Login, register, password reset
+├── components/           # Reusable Blade components
+└── emails/               # Markdown email templates
+```
+
+**Route groups:** public marketplace, authenticated buyer routes, `seller/*`, `admin/*`
+
+**Images:** stored in `storage/app/public`, served via `php artisan storage:link` and `PublicStorage` helper.
+
+---
+
+## Dark Mode
+
+- Toggle in the navbar (public), seller topbar, admin topbar, and auth pages
+- Preference stored in `localStorage` under `craftnest-theme`
+- Admin panel defaults to dark; public/seller default to light
+
+---
+
+## Future Improvements
+
+- Payment gateway integration (Stripe/PayPal)
+- AI-powered chatbot with live order lookup (optional upgrade from rule-based assistant)
+- Advanced search (facets, price range)
+- Multi-language support
+- PWA / mobile app
+- Newsletter system (out of scope for current build)
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT — portfolio and educational use welcome.

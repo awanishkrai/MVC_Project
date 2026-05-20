@@ -13,8 +13,7 @@
         <x-panel-nav-item href="{{ route('seller.products.index') }}" :active="request()->routeIs('seller.products.*')" icon="📦">Products</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('seller.orders.index') }}" :active="request()->routeIs('seller.orders.*')" icon="🛒">Orders</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('seller.reviews.index') }}" :active="request()->routeIs('seller.reviews.*')" icon="⭐">Reviews</x-panel-nav-item>
-        <x-panel-nav-item href="{{ route('seller.messages.index') }}" :active="request()->routeIs('seller.messages.*')" icon="💬" badge="Soon">Messages</x-panel-nav-item>
-        <x-panel-nav-item href="{{ route('seller.analytics.index') }}" :active="request()->routeIs('seller.analytics.*')" icon="📈" badge="Soon">Analytics</x-panel-nav-item>
+        <x-panel-nav-item href="{{ route('seller.analytics.index') }}" :active="request()->routeIs('seller.analytics.*')" icon="📈">Analytics</x-panel-nav-item>
 
         <div class="my-4 border-t border-stone-100 pt-4">
             <x-panel-nav-item href="{{ route('seller.settings') }}" :active="request()->routeIs('seller.settings')" icon="⚙️">Settings</x-panel-nav-item>

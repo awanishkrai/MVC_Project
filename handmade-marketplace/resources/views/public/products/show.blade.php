@@ -1,6 +1,10 @@
 @extends('layouts.public')
 @section('title', $product->title . ' — CraftNest')
 
+@section('category-strip')
+    @include('partials.public.category-strip')
+@endsection
+
 @section('content')
 <div class="cn-container py-8 sm:py-10 lg:py-12">
     <nav class="mb-6 text-sm text-stone-500">

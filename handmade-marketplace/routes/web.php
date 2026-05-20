@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ExportController as AdminExportController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
@@ -31,6 +32,7 @@ Route::get('/', [DashboardController::class, 'home'])->name('home');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/shops/{shop}', [ShopController::class, 'show'])->name('shops.show');
+Route::post('/chatbot/reply', [ChatbotController::class, 'reply'])->name('chatbot.reply');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
@@ -107,7 +109,6 @@ Route::middleware(['auth', 'seller'])
         Route::get('/orders', [SellerOrderController::class, 'index'])->name('orders.index');
         Route::patch('/orders/{order}/status', [SellerOrderController::class, 'updateStatus'])->name('orders.update-status');
         Route::get('/reviews', [SellerReviewController::class, 'index'])->name('reviews.index');
-        Route::view('/messages', 'seller.placeholders.coming-soon', ['title' => 'Messages', 'module' => 'Messaging'])->name('messages.index');
         Route::get('/analytics', [SellerAnalyticsController::class, 'index'])->name('analytics.index');
         Route::get('/exports/orders', [SellerExportController::class, 'orders'])->name('exports.orders');
         Route::get('/exports/products', [SellerExportController::class, 'products'])->name('exports.products');

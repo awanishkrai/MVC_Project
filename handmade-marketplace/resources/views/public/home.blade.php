@@ -1,6 +1,10 @@
 @extends('layouts.public')
 @section('title', 'CraftNest — Handmade Marketplace')
 
+@section('category-strip')
+    @include('partials.public.category-strip')
+@endsection
+
 @section('content')
 <section class="cn-card mx-auto mb-10 max-w-7xl overflow-hidden">
     <div class="relative min-h-[380px] cn-hero-gradient sm:min-h-[440px]">
@@ -10,7 +14,7 @@
             <h1 class="max-w-3xl font-display text-4xl font-bold leading-tight text-white sm:text-6xl">
                 Discover crafts made with <span class="text-craft-200">heart</span>
             </h1>
-            <p class="mt-5 max-w-lg text-lg text-craft-100">Jewelry, pottery, art & gifts from independent makers — like a mini Etsy, built with Laravel MVC.</p>
+            <p class="mt-5 max-w-lg text-lg text-craft-100">Jewelry, pottery, art & gifts from independent makers — curated for people who love handmade.</p>
             <div class="mt-8 flex flex-wrap justify-center gap-3">
                 <a href="{{ route('products.index') }}" class="cn-btn-primary !px-8 !py-3 shadow-craft-lg">Browse marketplace</a>
                 @guest

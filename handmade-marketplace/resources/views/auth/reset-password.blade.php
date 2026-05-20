@@ -2,32 +2,37 @@
 @section('title', 'Reset Password — CraftNest')
 
 @section('content')
-<h1 class="mb-2 text-2xl font-bold text-stone-900">Set new password</h1>
-<p class="mb-6 text-sm text-stone-500">Choose a strong password for your account.</p>
+<h1 class="font-display text-2xl font-bold text-stone-900 dark:text-white">Set new password</h1>
+<p class="mt-1 mb-8 text-sm text-stone-500 dark:text-stone-400">Choose a strong password for your CraftNest account.</p>
 
-<form method="POST" action="{{ route('password.store') }}">
+<form method="POST" action="{{ route('password.store') }}" class="space-y-5">
     @csrf
     <input type="hidden" name="token" value="{{ $token }}">
 
-    @include('partials.input', ['label' => 'Email', 'name' => 'email', 'type' => 'email', 'value' => $email, 'required' => true])
-
-    <div class="mb-4">
-        <label for="password" class="mb-1 block text-sm font-medium text-stone-700">New Password</label>
-        <input id="password" name="password" type="password" required
-            class="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm shadow-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500">
-        @error('password')
-            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+    <div>
+        <label for="email" class="cn-label dark:text-stone-300">Email</label>
+        <input id="email" name="email" type="email" value="{{ old('email', $email) }}" required
+            class="cn-input dark:border-stone-600 dark:bg-stone-800 dark:text-stone-100">
+        @error('email')
+            <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
         @enderror
     </div>
 
-    <div class="mb-6">
-        <label for="password_confirmation" class="mb-1 block text-sm font-medium text-stone-700">Confirm Password</label>
-        <input id="password_confirmation" name="password_confirmation" type="password" required
-            class="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm shadow-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500">
+    <div>
+        <label for="password" class="cn-label dark:text-stone-300">New password</label>
+        <input id="password" name="password" type="password" required
+            class="cn-input dark:border-stone-600 dark:bg-stone-800 dark:text-stone-100">
+        @error('password')
+            <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+        @enderror
     </div>
 
-    <button type="submit" class="w-full rounded-lg bg-amber-700 py-2.5 text-sm font-semibold text-white hover:bg-amber-800">
-        Reset password
-    </button>
+    <div>
+        <label for="password_confirmation" class="cn-label dark:text-stone-300">Confirm password</label>
+        <input id="password_confirmation" name="password_confirmation" type="password" required
+            class="cn-input dark:border-stone-600 dark:bg-stone-800 dark:text-stone-100">
+    </div>
+
+    <button type="submit" class="cn-btn-primary w-full !py-3">Reset password</button>
 </form>
 @endsection

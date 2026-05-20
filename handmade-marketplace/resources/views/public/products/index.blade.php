@@ -1,6 +1,10 @@
 @extends('layouts.public')
 @section('title', 'Marketplace — CraftNest')
 
+@section('category-strip')
+    @include('partials.public.category-strip')
+@endsection
+
 @section('content')
 <div class="cn-container pb-12">
 <section class="cn-card mb-8 overflow-hidden">

@@ -1,9 +1,9 @@
-<header class="sticky top-0 z-50 border-b border-stone-200/80 bg-white/95 shadow-sm backdrop-blur-md">
+<header class="sticky top-0 z-50 border-b border-stone-200/80 bg-white/95 shadow-sm backdrop-blur-md dark:border-stone-800 dark:bg-stone-900/95">
     <div class="cn-container">
         <div class="flex h-16 items-center justify-between gap-4">
             <a href="{{ route('home') }}" class="flex shrink-0 items-center gap-2">
                 <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-craft-500 to-craft-800 text-sm font-bold text-white shadow-md">CN</span>
-                <span class="hidden font-display text-xl font-bold text-stone-900 sm:inline">Craft<span class="text-craft-600">Nest</span></span>
+                <span class="hidden font-display text-xl font-bold text-stone-900 dark:text-white sm:inline">Craft<span class="text-craft-600">Nest</span></span>
             </a>
 
             <form action="{{ route('products.index') }}" method="GET" class="hidden max-w-md flex-1 md:block">
@@ -16,6 +16,7 @@
             </form>
 
             <nav class="flex items-center gap-1 sm:gap-2">
+                @include('partials.theme-toggle')
                 @auth
                     <x-notification-bell class="hidden sm:block" />
                 @endauth

@@ -12,6 +12,10 @@ use Illuminate\Support\Collection;
 
 class NotificationService
 {
+    public function __construct(
+        private EmailNotificationService $emailNotifications,
+    ) {}
+
     public const LARGE_ORDER_THRESHOLD = 100.00;
 
     public const LOW_STOCK_PLATFORM_THRESHOLD = 5;
@@ -44,6 +48,8 @@ class NotificationService
         );
 
         $this->notifySellersNewOrder($order);
+
+        $this->emailNotifications->buyerOrderPlaced($order);
 
         if ((float) $order->total_amount >= self::LARGE_ORDER_THRESHOLD) {
             $this->notifyAdmins(
@@ -89,6 +95,12 @@ class NotificationService
         if (isset($buyerMessages[$status])) {
             [$type, $title, $message] = $buyerMessages[$status];
             $this->send($order->user, $type, $title, $message, route('orders.show', $order), ['order_id' => $order->id]);
+
+            match ($status) {
+                'shipped' => $this->emailNotifications->buyerOrderShipped($order),
+                'delivered' => $this->emailNotifications->buyerOrderDelivered($order),
+                default => null,
+            };
         }
     }
 
@@ -105,6 +117,8 @@ class NotificationService
                 route('seller.orders.index'),
                 ['order_id' => $order->id]
             );
+
+            $this->emailNotifications->sellerNewOrder($seller, $order);
         });
     }
 
@@ -125,6 +139,8 @@ class NotificationService
             route('seller.reviews.index'),
             ['review_id' => $review->id, 'product_id' => $review->product_id]
         );
+
+        $this->emailNotifications->sellerNewReview($seller, $review);
     }
 
     public function notifySellerLowStock(Product $product): void

@@ -6,6 +6,7 @@
         @endif
     </div>
     <div class="flex items-center gap-3 text-sm text-slate-400">
+        @include('partials.theme-toggle', ['variant' => 'dark'])
         <x-notification-bell theme="dark" />
         <span>{{ auth()->user()->name }}</span>
         <form method="POST" action="{{ route('logout') }}">@csrf
