@@ -5,7 +5,7 @@
 @endphp
 
 <div class="cn-card-hover group relative overflow-hidden">
-    <div class="absolute right-3 top-3 z-10" onclick="event.preventDefault(); event.stopPropagation();">
+    <div class="absolute right-3 top-3 z-10" onclick="event.stopPropagation();">
         <x-wishlist-button :product="$product" :is-wishlisted="$wishlisted" />
     </div>
     <a href="{{ route('products.show', $product) }}" class="block">

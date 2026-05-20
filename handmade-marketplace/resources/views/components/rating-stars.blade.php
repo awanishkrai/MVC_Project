@@ -22,7 +22,7 @@
     <div {{ $attributes->merge(['class' => 'flex flex-wrap '.$sizeClass]) }}>
         @for ($star = 1; $star <= $max; $star++)
             <label class="cursor-pointer transition hover:scale-110">
-                <input type="radio" name="{{ $name }}" value="{{ $star }}" class="peer sr-only" @checked(old($name, $selected) == $star) @required($loop->first)>
+                <input type="radio" name="{{ $name }}" value="{{ $star }}" class="peer sr-only" @checked(old($name, $selected) == $star) @required($star === 1)>
                 <span class="text-amber-300 peer-checked:text-amber-500 hover:text-amber-400">★</span>
             </label>
         @endfor
