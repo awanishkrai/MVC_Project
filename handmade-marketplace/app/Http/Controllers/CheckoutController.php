@@ -6,6 +6,7 @@ use App\Http\Requests\CheckoutRequest;
 use App\Models\Order;
 use App\Models\Product;
 use App\Services\CartService;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -94,6 +95,11 @@ class CheckoutController extends Controller
         }
 
         $this->cart->clear();
+
+        app(NotificationService::class)->afterOrderPlaced($order->fresh(['user', 'items.product.user']));
+
+        $lowStockCount = \App\Models\Product::where('stock_status', 'low_stock')->count();
+        app(NotificationService::class)->notifyAdminsLowStockSummary($lowStockCount);
 
         return redirect()->route('checkout.success', $order)->with('success', 'Order placed successfully!');
     }

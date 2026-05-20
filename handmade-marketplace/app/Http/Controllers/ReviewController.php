@@ -6,6 +6,7 @@ use App\Http\Requests\ReviewStoreRequest;
 use App\Http\Requests\ReviewUpdateRequest;
 use App\Models\Product;
 use App\Models\Review;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 
 class ReviewController extends Controller
@@ -16,13 +17,15 @@ class ReviewController extends Controller
 
         $this->authorize('create', [Review::class, $product]);
 
-        $product->reviews()->create([
+        $review = $product->reviews()->create([
             'user_id' => $request->user()->id,
             'rating' => $request->validated('rating'),
             'title' => $request->validated('title'),
             'comment' => $request->validated('comment'),
             'is_verified_purchase' => true,
         ]);
+
+        app(NotificationService::class)->notifySellerNewReview($review);
 
         return redirect()
             ->route('products.show', $product)

@@ -52,7 +52,7 @@
                             @csrf
                             @method('PATCH')
                             <select name="order_status" class="cn-input !w-auto !py-2 !text-sm">
-                                @foreach (['pending', 'processing', 'shipped', 'delivered'] as $status)
+                                @foreach (['pending', 'processing', 'shipped', 'delivered', 'cancelled'] as $status)
                                     <option value="{{ $status }}" @selected($order->order_status === $status)>{{ ucfirst($status) }}</option>
                                 @endforeach
                             </select>

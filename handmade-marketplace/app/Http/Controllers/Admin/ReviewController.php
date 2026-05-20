@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Review;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -32,6 +33,8 @@ class ReviewController extends Controller
     public function destroy(Review $review): RedirectResponse
     {
         $this->authorize('delete', $review);
+
+        app(NotificationService::class)->notifyAdminsReviewDeleted($review, $request->user());
 
         $review->delete();
 

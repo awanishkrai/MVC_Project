@@ -6,6 +6,7 @@
         @endif
     </div>
     <div class="flex items-center gap-3 text-sm text-slate-400">
+        <x-notification-bell theme="dark" />
         <span>{{ auth()->user()->name }}</span>
         <form method="POST" action="{{ route('logout') }}">@csrf
             <button type="submit" class="rounded-lg px-2 py-1 text-xs hover:bg-slate-800 hover:text-white">Logout</button>

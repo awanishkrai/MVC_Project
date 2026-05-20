@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\AnalyticsController as AdminAnalyticsController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ExportController as AdminExportController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
@@ -10,6 +13,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\Seller\AnalyticsController as SellerAnalyticsController;
+use App\Http\Controllers\Seller\ExportController as SellerExportController;
 use App\Http\Controllers\Seller\OrderController as SellerOrderController;
 use App\Http\Controllers\Seller\ReviewController as SellerReviewController;
 use App\Http\Controllers\ShopController;
@@ -68,6 +73,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
     Route::put('/products/{product}/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/products/{product}/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
 });
 
 /*
@@ -99,7 +108,9 @@ Route::middleware(['auth', 'seller'])
         Route::patch('/orders/{order}/status', [SellerOrderController::class, 'updateStatus'])->name('orders.update-status');
         Route::get('/reviews', [SellerReviewController::class, 'index'])->name('reviews.index');
         Route::view('/messages', 'seller.placeholders.coming-soon', ['title' => 'Messages', 'module' => 'Messaging'])->name('messages.index');
-        Route::view('/analytics', 'seller.placeholders.coming-soon', ['title' => 'Analytics', 'module' => 'Analytics'])->name('analytics.index');
+        Route::get('/analytics', [SellerAnalyticsController::class, 'index'])->name('analytics.index');
+        Route::get('/exports/orders', [SellerExportController::class, 'orders'])->name('exports.orders');
+        Route::get('/exports/products', [SellerExportController::class, 'products'])->name('exports.products');
         Route::get('/settings', [ProfileController::class, 'show'])->name('settings');
     });
 
@@ -129,7 +140,11 @@ Route::middleware(['auth', 'admin'])
         Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
         Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
         Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
-        Route::view('/reports', 'admin.placeholders.coming-soon', ['title' => 'Reports', 'module' => 'Reports'])->name('reports.index');
+        Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics.index');
+        Route::redirect('/reports', '/admin/analytics')->name('reports.index');
+        Route::get('/exports/orders', [AdminExportController::class, 'orders'])->name('exports.orders');
+        Route::get('/exports/users', [AdminExportController::class, 'users'])->name('exports.users');
+        Route::get('/exports/reviews', [AdminExportController::class, 'reviews'])->name('exports.reviews');
         Route::get('/settings', [ProfileController::class, 'show'])->name('settings');
     });
 

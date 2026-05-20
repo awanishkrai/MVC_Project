@@ -16,6 +16,9 @@
             </form>
 
             <nav class="flex items-center gap-1 sm:gap-2">
+                @auth
+                    <x-notification-bell class="hidden sm:block" />
+                @endauth
                 <a href="{{ route('products.index') }}" @class(['hidden rounded-full px-3 py-2 text-sm font-medium sm:inline-flex', 'bg-craft-100 text-craft-800' => request()->routeIs('products.*'), 'text-stone-600 hover:bg-stone-100' => !request()->routeIs('products.*')])>Shop</a>
 
                 <a href="{{ route('cart.index') }}" @class(['relative rounded-full px-3 py-2 text-sm font-medium', 'bg-craft-100 text-craft-800' => request()->routeIs('cart.*'), 'text-stone-600 hover:bg-stone-100' => !request()->routeIs('cart.*')])>

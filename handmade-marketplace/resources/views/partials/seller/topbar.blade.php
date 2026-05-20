@@ -6,6 +6,7 @@
         @endif
     </div>
     <div class="flex shrink-0 items-center gap-2">
+        <x-notification-bell />
         @if (auth()->user()->shop)
             <a href="{{ route('shops.show', auth()->user()->shop) }}" target="_blank" rel="noopener" class="cn-btn-secondary hidden !py-2 !text-xs sm:inline-flex">Preview shop</a>
         @endif

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ShopStoreRequest;
 use App\Http\Requests\ShopUpdateRequest;
 use App\Models\Shop;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -54,7 +55,9 @@ class ShopController extends Controller
             $data['logo_url'] = $request->file('logo')->store('shops/logos', 'public');
         }
 
-        auth()->user()->shop()->create($data);
+        $shop = auth()->user()->shop()->create($data);
+
+        app(NotificationService::class)->notifyAdminsNewShop($shop->load('user'));
 
         return redirect()->route('seller.shop.index')
             ->with('success', 'Your shop has been created successfully!');

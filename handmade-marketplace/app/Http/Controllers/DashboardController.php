@@ -6,6 +6,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Models\User;
+use App\Services\AdminAnalyticsService;
+use App\Services\SellerAnalyticsService;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
@@ -19,10 +22,11 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function seller()
+    public function seller(): View
     {
         $user = auth()->user()->load('shop');
         $shop = $user->shop;
+        $analytics = $shop ? SellerAnalyticsService::for($user->id) : null;
 
         return view('seller.dashboard', [
             'user' => $user,
@@ -33,22 +37,26 @@ class DashboardController extends Controller
             'recentProducts' => $shop
                 ? $shop->products()->with('category')->latest()->take(5)->get()
                 : collect(),
+            'activity' => $analytics?->recentActivity() ?? [
+                'recentOrders' => collect(),
+                'recentReviews' => collect(),
+                'lowStock' => collect(),
+                'recentProducts' => collect(),
+            ],
+            'revenue' => $analytics?->revenueStats() ?? ['total' => 0, 'monthly' => 0, 'weekly' => 0],
+            'orderStats' => $analytics?->orderStats() ?? ['total' => 0, 'pending' => 0, 'completed' => 0],
         ]);
     }
 
-    public function admin()
+    public function admin(): View
     {
+        $analytics = new AdminAnalyticsService;
+
         return view('admin.dashboard', [
             'user' => auth()->user(),
-            'stats' => [
-                'users' => User::count(),
-                'buyers' => User::where('role', 'buyer')->count(),
-                'sellers' => User::where('role', 'seller')->count(),
-                'shops' => Shop::count(),
-                'products' => Product::count(),
-                'categories' => Category::count(),
-            ],
-            'recentUsers' => User::latest()->take(5)->get(),
+            'stats' => $analytics->platformStats(),
+            'activity' => $analytics->recentActivity(),
+            'recentUsers' => $analytics->recentActivity()['users'],
             'recentProducts' => Product::with(['shop', 'category'])->latest()->take(5)->get(),
         ]);
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderStatusUpdateRequest;
 use App\Models\Order;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -29,7 +30,10 @@ class OrderController extends Controller
             403
         );
 
+        $previous = $order->order_status;
         $order->update(['order_status' => $request->validated('order_status')]);
+
+        app(NotificationService::class)->afterOrderStatusChanged($order->fresh('user'), $previous);
 
         return back()->with('success', 'Order status updated.');
     }

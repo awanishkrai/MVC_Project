@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Services\CartService;
+use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -33,6 +34,9 @@ class WishlistController extends Controller
         auth()->user()->wishlists()->firstOrCreate([
             'product_id' => $product->id,
         ]);
+
+        $count = $product->wishlists()->count();
+        app(NotificationService::class)->notifySellerWishlistMilestone($product, $count);
 
         return back()->with('success', 'Saved to your wishlist.');
     }
