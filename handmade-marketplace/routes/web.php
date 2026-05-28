@@ -135,8 +135,14 @@ Route::middleware(['auth', 'admin'])
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
         Route::resource('categories', CategoryController::class)->except(['show']);
 
-        Route::view('/products', 'admin.placeholders.coming-soon', ['title' => 'Products', 'module' => 'Product moderation'])->name('products.index');
-        Route::view('/users', 'admin.placeholders.coming-soon', ['title' => 'Users', 'module' => 'User management'])->name('users.index');
+        Route::get('/products', [\App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
+        Route::patch('/products/{product}/status', [\App\Http\Controllers\Admin\ProductController::class, 'updateStatus'])->name('products.update-status');
+        Route::delete('/products/{product}', [\App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('products.destroy');
+
+        Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+        Route::patch('/users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'updateRole'])->name('users.update-role');
+        Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+
         Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
         Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
         Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');

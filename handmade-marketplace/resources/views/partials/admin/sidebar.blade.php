@@ -10,8 +10,8 @@
     <nav class="flex-1 space-y-1 p-3">
         <x-panel-nav-item href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')" icon="📊" theme="dark">Dashboard</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('admin.categories.index') }}" :active="request()->routeIs('admin.categories.*')" icon="🏷️" theme="dark">Categories</x-panel-nav-item>
-        <x-panel-nav-item href="{{ route('admin.products.index') }}" :active="request()->routeIs('admin.products.*')" icon="📦" theme="dark" badge="Soon">Products</x-panel-nav-item>
-        <x-panel-nav-item href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')" icon="👥" theme="dark" badge="Soon">Users</x-panel-nav-item>
+        <x-panel-nav-item href="{{ route('admin.products.index') }}" :active="request()->routeIs('admin.products.*')" icon="📦" theme="dark">Products</x-panel-nav-item>
+        <x-panel-nav-item href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')" icon="👥" theme="dark">Users</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('admin.orders.index') }}" :active="request()->routeIs('admin.orders.*')" icon="🛒" theme="dark">Orders</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('admin.reviews.index') }}" :active="request()->routeIs('admin.reviews.*')" icon="⭐" theme="dark">Reviews</x-panel-nav-item>
         <x-panel-nav-item href="{{ route('admin.analytics.index') }}" :active="request()->routeIs('admin.analytics.*') || request()->routeIs('admin.reports.*')" icon="📈" theme="dark">Analytics</x-panel-nav-item>
